@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "188056389587",
+    "project_id": "e-commerce-app-8dc3b",
+    "storage_bucket": "e-commerce-app-8dc3b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:188056389587:android:2ab17149ae9dbca6bf1126",
+        "android_client_info": {
+          "package_name": "com.muhammadfiaz.buzz"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKS1WOzzShjLqgkvG6utAwGkDZQGLbG2M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -28,12 +28,8 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
   @override
   void initState() {
     super.initState();
-    init();
   }
 
-  init() async {
-    //
-  }
 
   @override
   void setState(fn) {
@@ -54,7 +50,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
         currentIndex: selectedIndex,
         unselectedItemColor: const Color(0xff9e9e9e),
         selectedItemColor: context.iconColor,
-        iconSize: 24,
+        iconSize: 28,
         selectedFontSize: 14,
         showUnselectedLabels: false,
         showSelectedLabels: false,

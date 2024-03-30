@@ -14,9 +14,13 @@ import 'firebase_options.dart';
 AppStore appStore = AppStore();
 
 // The main function of the application
-void main() async {
+Future<void> main() async {
   // Ensures that widget binding is initialized
   WidgetsFlutterBinding.ensureInitialized();
+  //initialize Firebase using DefaultFirebaseOptions.
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   // Initializes the application with a list of supported languages
   await initialize(aLocaleLanguageList: languageList());
@@ -27,10 +31,7 @@ void main() async {
   // Sets the default position of the toast messages to the bottom of the screen
   defaultToastGravityGlobal = ToastGravity.BOTTOM;
 
-  //initialize Firebase using DefaultFirebaseOptions.
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+
 
   // Runs the application
   runApp(const MyApp());

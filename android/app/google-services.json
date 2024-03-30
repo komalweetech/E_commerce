@@ -1,13 +1,32 @@
 {
   "project_info": {
-    "project_number": "188056389587",
-    "project_id": "e-commerce-app-8dc3b",
-    "storage_bucket": "e-commerce-app-8dc3b.appspot.com"
+    "project_number": "517101200001",
+    "project_id": "e-commerce-63d08",
+    "storage_bucket": "e-commerce-63d08.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:188056389587:android:2ab17149ae9dbca6bf1126",
+        "mobilesdk_app_id": "1:517101200001:android:9a7b7f0bd3e7d1ce1b2380",
+        "android_client_info": {
+          "package_name": "com.example.seller_shop"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBYvdOlCafmJUtcTlVY0E02lZTw_fFT1Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:517101200001:android:7454707f943827091b2380",
         "android_client_info": {
           "package_name": "com.muhammadfiaz.buzz"
         }
@@ -15,7 +34,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCKS1WOzzShjLqgkvG6utAwGkDZQGLbG2M"
+          "current_key": "AIzaSyBBYvdOlCafmJUtcTlVY0E02lZTw_fFT1Y"
         }
       ],
       "services": {

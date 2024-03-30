@@ -9,7 +9,7 @@ import 'package:buzz/screen/SingUP_Screen.dart';
 import 'package:buzz/utils/Widgets.dart';
 
 class SignInScreen extends StatefulWidget {
-  const SignInScreen({super.key});
+  const SignInScreen({super.key,});
 
   @override
   State<SignInScreen> createState() => _SignInScreenState();
@@ -34,18 +34,15 @@ class _SignInScreenState extends State<SignInScreen> {
         if(userCredential != null) {
 
           finish(context);
-          const DashBoardScreen().launch(context);
-          Fluttertoast.showToast(msg: "LogIn Successfully");
           log("LogIn Successfully ");
+          Fluttertoast.showToast(msg: "LogIn Successfully");
+          const DashBoardScreen().launch(context);
         }
       }on FirebaseAuthException catch(ex) {
-        Fluttertoast.showToast(msg: "User login");
+        Fluttertoast.showToast(msg: "User login $ex");
         log(ex.code.toString());
       }
     }
- UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email,
-        password: password);
   }
 
   @override
@@ -62,7 +59,7 @@ class _SignInScreenState extends State<SignInScreen> {
           onTap: () {
             Navigator.pop(context);
           },
-          child: Icon(Icons.arrow_back_ios, color: context.iconColor, size: 20),
+          child: Icon(Icons.arrow_back_ios, color: context.iconColor, size: 20,),
         ),
       ),
       body: SingleChildScrollView(

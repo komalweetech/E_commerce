@@ -1,4 +1,5 @@
 import 'package:buzz/screen/logInScreen.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:buzz/main.dart';
@@ -6,7 +7,7 @@ import 'package:buzz/utils/Widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class SingUpScreen extends StatefulWidget {
-  const SingUpScreen({super.key});
+  const SingUpScreen({super.key,});
 
   @override
   State<SingUpScreen> createState() => _SingUpScreenState();
@@ -19,6 +20,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController conformPassController = TextEditingController();
+
 
   void createAccount() async {
     String userName = userController.text.trim();

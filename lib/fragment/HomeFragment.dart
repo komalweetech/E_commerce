@@ -20,28 +20,28 @@ class _HomeFragmentState extends State<HomeFragment> {
   final List<ShoppingModel> list = getAllData();
   final List<ShoppingModel> data = getSearchData();
 
-  @override
-  void initState() {
-    super.initState();
-    init();
-  }
-
-  Future<void> init() async {
-    afterBuildCreated(() {
-      dialog();
-    });
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   init();
+  // }
+  //
+  // Future<void> init() async {
+  //   afterBuildCreated(() {
+  //     dialog();
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Image(
-          image: const AssetImage('assets/images/ic_logo.png'),
-          height: 30,
-          width: 30,
-          color: appStore.isDarkModeOn ? Colors.white : Colors.black,
+        title: const Image(
+          image: AssetImage('assets/images/ic_logo.png'),
+          height: 40,
+          width: 50,
+          // color: appStore.isDarkModeOn ? Colors.white : Colors.black,
           fit: BoxFit.cover,
         ),
         elevation: 0,

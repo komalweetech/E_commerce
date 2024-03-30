@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:buzz/main.dart';
@@ -6,11 +7,14 @@ import 'package:buzz/screen/SignInScreen.dart';
 import 'package:buzz/utils/Widgets.dart';
 
 
+
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
+
   @override
   Widget build(BuildContext context) {
+    final Future<FirebaseApp> _firebaseInitialization = Firebase.initializeApp();
     return Scaffold(
       body: Align(
         alignment: const Alignment(0.1, 0.4),

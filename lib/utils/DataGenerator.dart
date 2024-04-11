@@ -9,8 +9,6 @@ List<ShoppingModel> getAccount() {
   list.add(ShoppingModel(name: 'My Order'));
   list.add(ShoppingModel(name: 'Vouchers'));
   list.add(ShoppingModel(name: 'Shopping Address'));
-  list.add(ShoppingModel(name: 'FAQ'));
-  list.add(ShoppingModel(name: 'Customer Services'));
   list.add(ShoppingModel(name: 'Setting'));
 
   return list;

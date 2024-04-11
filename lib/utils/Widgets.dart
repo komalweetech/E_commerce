@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:buzz/main.dart';
-import 'package:buzz/screen/ProductScreen.dart';
+import 'package:buzz/screen/details/ProductScreen.dart';
 
 
 sSAppButton({

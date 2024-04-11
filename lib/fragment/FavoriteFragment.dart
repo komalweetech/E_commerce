@@ -1,25 +1,107 @@
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:nb_utils/nb_utils.dart';
-import 'package:buzz/screen/DevelopmentScreen.dart';
-import 'package:buzz/utils/DataGenerator.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
-import '../model/ShoppingModel.dart';
+import '../model/product_model.dart';
+import '../screen/details/DetailScreen.dart';
+import '../screen/widgets/card_widget.dart';
 
-class FavoriteFragment extends StatelessWidget {
-  final List<ShoppingModel> list = getAllFavorite();
 
- FavoriteFragment({super.key});
+class FavoriteFragment extends StatefulWidget {
+
+  const FavoriteFragment({Key? key}) : super(key: key);
+
+  @override
+  _FavoriteFragmentState createState() => _FavoriteFragmentState();
+}
+
+class _FavoriteFragmentState extends State<FavoriteFragment> {
+
 
   @override
   Widget build(BuildContext context) {
+    print('Building FavoriteFragment widget');
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-        title: Text("WishList", style: boldTextStyle()),
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance.collection('favorite').snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            print('Firestore stream: Waiting for data...');
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            print('Firestore stream error: ${snapshot.error}');
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+          print('Firestore stream: Data received...');
+          return ListView.separated(
+            itemCount: snapshot.data!.docs.length,
+            itemBuilder: (context, index) {
+              final productData = snapshot.data!.docs[index];
+              ProductModel productModel = ProductModel(
+                productId: productData['productId'],
+                productName: productData['productName'],
+                fullPrice: productData['fullPrice'],
+                productImages: productData['productImages'],
+                deliveryTime: productData['deliveryTime'],
+                productDescription: productData['productDescription'],
+                createdAt: productData['createdAt'],
+                updatedAt: productData['updatedAt'],
+              );
+              return Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 15.0, horizontal: 20.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(14),
+                    child: Material(
+                      color: Colors.transparent,
+                      borderRadius: BorderRadius.circular(7),
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(7),
+                        onTap: () {
+                          Get.to(DetailScreen(productModel: productModel)
+                          );
+                        },
+                        child: Stack(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(14),
+                              child: SizedBox(
+                                height: Get.height / 3,
+                                width: Get.width,
+                                child: Image.network(
+                                  productModel.productImages.first, fit: BoxFit.cover,),
+                              ),
+                            ),
+                            Positioned(
+                              bottom: 10,
+                              left: 10,
+                              right: 10,
+                              child: CardWidget(
+                                name: productModel.productName,
+                                subName: productModel.createdAt,
+                                amount: productModel.fullPrice,),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+              );
+            },
+            separatorBuilder: (context, index) {
+              print('Building separator $index');
+              return const Divider(
+                color: Colors.grey,
+                thickness: 1,
+                height: 1,
+              );
+            },
+          );
+        },
       ),
-      body: const DevScreen(),
     );
   }
 }

@@ -1,8 +1,11 @@
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get/get.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:buzz/screen/SplashScreen.dart';
+import 'package:buzz/screen/splash/SplashScreen.dart';
 import 'package:buzz/store/AppStore.dart';
 import 'package:buzz/utils/AppTheme.dart';
 import 'package:buzz/utils/Constants.dart';
@@ -17,6 +20,8 @@ AppStore appStore = AppStore();
 Future<void> main() async {
   // Ensures that widget binding is initialized
   WidgetsFlutterBinding.ensureInitialized();
+  // Initialize EasyLoading
+  EasyLoading.init();
   //initialize Firebase using DefaultFirebaseOptions.
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -35,6 +40,7 @@ Future<void> main() async {
 
   // Runs the application
   runApp(const MyApp());
+
 }
 
 // The root widget of the application
@@ -46,7 +52,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Observer(
-      builder: (_) => MaterialApp(
+      builder: (_) => GetMaterialApp(
         // Disables the debug banner
         debugShowCheckedModeBanner: false,
         // Sets the title of the application

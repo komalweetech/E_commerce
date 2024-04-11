@@ -1,49 +1,126 @@
+// ignore_for_file: file_names, prefer_const_constructors, avoid_unnecessary_containers, sized_box_for_whitespace, prefer_const_literals_to_create_immutables, unnecessary_string_interpolations, prefer_interpolation_to_compose_strings
+
+import 'package:buzz/screen/details/DetailScreen.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:nb_utils/nb_utils.dart';
-import 'package:buzz/component/ProductItemWidget.dart';
+import 'package:get/get.dart';
+import 'package:image_card/image_card.dart';
 
+import '../model/product_model.dart';
+import '../utils/app_constant.dart';
 
-import '../../../main.dart';
-
-class ViewAllScreen extends StatefulWidget {
-  const ViewAllScreen({super.key});
-
-  @override
-  ViewAllScreenState createState() => ViewAllScreenState();
-}
-
-class ViewAllScreenState extends State<ViewAllScreen> {
-  @override
-  void initState() {
-    super.initState();
-    init();
-  }
-
-  void init() async {
-    //
-  }
-
-  @override
-  void setState(fn) {
-    if (mounted) super.setState(fn);
-  }
+class AllProductsScreen extends StatelessWidget {
+  const AllProductsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
-        centerTitle: true,
-        title: Image(image: const AssetImage('assets/images/ic_logo.png'), height: 30, width: 30, color: appStore.isDarkModeOn ? Colors.white : Colors.black, fit: BoxFit.cover),
-        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero, side: BorderSide(color: Color(0x00000000), width: 1)),
-        leading: InkWell(
-          onTap: () {
-            finish(context);
-          },
-          child: Icon(Icons.arrow_back_ios, color: context.iconColor, size: 20),
+        iconTheme: IconThemeData(
+          color: AppConstant.appTextColor,
+        ),
+        backgroundColor: AppConstant.appPrimaryColor,
+        title: Text(
+          'All Products',
+          style: TextStyle(color: AppConstant.appTextColor),
         ),
       ),
-      body: ProductItemWidget(),
+      body: FutureBuilder(
+        future: FirebaseFirestore.instance
+            .collection('items').get(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return Center(
+              child: Text("Error"),
+            );
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Container(
+              height: Get.height / 5,
+              child: Center(
+                child: CupertinoActivityIndicator(),
+              ),
+            );
+          }
+
+          if (snapshot.data!.docs.isEmpty) {
+            return Center(
+              child: Text("No products found!"),
+            );
+          }
+
+          if (snapshot.data != null) {
+            return GridView.builder(
+              itemCount: snapshot.data!.docs.length,
+              shrinkWrap: true,
+              physics: BouncingScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 5,
+                crossAxisSpacing: 5,
+                childAspectRatio: 0.80,
+              ),
+              itemBuilder: (context, index) {
+                final productData = snapshot.data!.docs[index];
+                ProductModel productModel = ProductModel(
+                  productId: productData['productId'],
+                  productName: productData['productName'],
+                  fullPrice: productData['fullPrice'],
+                  productImages: productData['productImages'],
+                  deliveryTime: productData['deliveryTime'],
+                  productDescription: productData['productDescription'],
+                  createdAt: productData['createdAt'],
+                  updatedAt: productData['updatedAt'],
+                );
+
+                // CategoriesModel categoriesModel = CategoriesModel(
+                //   categoryId: snapshot.data!.docs[index]['categoryId'],
+                //   categoryImg: snapshot.data!.docs[index]['categoryImg'],
+                //   categoryName: snapshot.data!.docs[index]['categoryName'],
+                //   createdAt: snapshot.data!.docs[index]['createdAt'],
+                //   updatedAt: snapshot.data!.docs[index]['updatedAt'],
+                // );
+                return Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () => Get.to(() =>
+                          DetailScreen(productModel: productModel)),
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Container(
+                          child: FillImageCard(
+                            borderRadius: 20.0,
+                            width: Get.width / 2.3,
+                            heightImage: Get.height / 6,
+                            imageProvider: CachedNetworkImageProvider(
+                              productModel.productImages[0],
+                            ),
+                            title: Center(
+                              child: Text(
+                                productModel.productName,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: TextStyle(fontSize: 12.0),
+                              ),
+                            ),
+                            footer: Center(
+                              child: Text("PKR: " + productModel.fullPrice),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            );
+          }
+
+          return Container();
+        },
+      ),
     );
   }
 }

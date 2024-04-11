@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:buzz/screen/SignInScreen.dart';
+import 'package:buzz/screen/auth/user_signIn_screen.dart';
 import 'package:buzz/utils/Widgets.dart';
 
 
@@ -50,7 +50,7 @@ class ResetScreen extends StatelessWidget {
               context: context,
               title: 'Sign in now',
               onPressed: () {
-                const SignInScreen().launch(context);
+                const UserSignInScreen().launch(context);
               },
             ),
           ],

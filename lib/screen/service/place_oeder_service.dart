@@ -55,7 +55,7 @@ void placeOrder({
           customerAddress: customerAddress,
           customerDeviceToken: customerDeviceToken,
         );
-
+        print("Place order screen product id = ${orderModel.productId}");
         orders.add(orderModel); // Add the orderModel to the list
         for (var x = 0; x < documents.length; x++) {
           // await FirebaseFirestore.instance
@@ -89,7 +89,7 @@ void placeOrder({
               .doc(orderModel.productId.toString())
               .delete()
               .then((value) {
-            print('Delete cart Products $orderModel.productId.toString()');
+            print('Delete cart Products ${orderModel.productId.toString()}');
           });
         }
       }

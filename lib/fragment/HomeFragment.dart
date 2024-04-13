@@ -37,6 +37,7 @@ class _HomeFragmentState extends State<HomeFragment> {
             if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             }
+            print('home screen all data == ${ snapshot.hasData}');
             return SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -132,6 +133,8 @@ class _HomeFragmentState extends State<HomeFragment> {
                         updatedAt: productData['updatedAt'],
                       );
 
+                      print('Home screen Product Id == ${productModel.productId}');
+
                       // CategoriesModel categoriesModel = CategoriesModel(
                       //   categoryId: snapshot.data!.docs[index]['categoryId'],
                       //   categoryImg: snapshot.data!.docs[index]['categoryImg'],
@@ -159,8 +162,10 @@ class _HomeFragmentState extends State<HomeFragment> {
                                     deliveryTime: productModel.deliveryTime,
                                     productDescription: productModel.productDescription,
                                     createdAt: productModel.createdAt,
-                                    updatedAt: productModel.updatedAt) ,
+                                    updatedAt: productModel.updatedAt),
+
                                 onFavoriteToggle: (isFavorite) {
+                                  print('favorite model  Product Id == ${productModel.productId}');
                                   if (isFavorite) {
                                     // Item is now favorite
                                   } else {

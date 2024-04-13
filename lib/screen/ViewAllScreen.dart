@@ -75,6 +75,7 @@ class AllProductsScreen extends StatelessWidget {
                   updatedAt: productData['updatedAt'],
                 );
 
+                print("View all screen product id = ${productModel.productId}");
                 // CategoriesModel categoriesModel = CategoriesModel(
                 //   categoryId: snapshot.data!.docs[index]['categoryId'],
                 //   categoryImg: snapshot.data!.docs[index]['categoryImg'],

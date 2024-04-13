@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nb_utils/nb_utils.dart';
 import '../main.dart';
+import '../screen/auth/update_profile_screen.dart';
 import '../utils/Colors.dart';
 import '../utils/Widgets.dart';
 
@@ -89,7 +90,7 @@ class _ProfileFragmentState extends State<ProfileFragment> {
               padding:  EdgeInsets.all(12),
               child: GestureDetector(
                 onTap: () {
-                  // Get.to(UpDateProfile());
+                  Get.to(UpdateProfileScreen());
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

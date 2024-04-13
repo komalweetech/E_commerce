@@ -59,6 +59,9 @@ class _BestODWidgetState extends State<BestODWidget>  {
           // .limit(1)
           .get();
 
+      print("constracture  product id = ${widget.favoriteItem.productId}");
+      print("snapshot product id = ${querySnapshot.docs}");
+
       // Delete the document from the "favorite" collection
       if (querySnapshot.docs.isNotEmpty) {
         try {

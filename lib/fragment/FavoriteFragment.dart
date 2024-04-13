@@ -50,6 +50,7 @@ class _FavoriteFragmentState extends State<FavoriteFragment> {
                 createdAt: productData['createdAt'],
                 updatedAt: productData['updatedAt'],
               );
+              print('Favorite screen Product Id == ${productModel.productId}');
               return Padding(
                   padding: const EdgeInsets.symmetric(
                       vertical: 15.0, horizontal: 20.0),
@@ -61,9 +62,11 @@ class _FavoriteFragmentState extends State<FavoriteFragment> {
                       child: InkWell(
                         borderRadius: BorderRadius.circular(7),
                         onTap: () {
-                          Get.to(DetailScreen(productModel: productModel)
-                          );
+                          Get.to(DetailScreen(
+                            productModel: productModel,
+                          ));
                         },
+                        onLongPress: () {},
                         child: Stack(
                           children: [
                             ClipRRect(

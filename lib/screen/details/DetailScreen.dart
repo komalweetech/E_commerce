@@ -29,7 +29,6 @@ class DetailScreenState extends State<DetailScreen> {
   int selectedIndex = 0; // Define selectedIndex here
   User? user = FirebaseAuth.instance.currentUser;
 
-  int index = 0;
 
   @override
   void initState() {
@@ -286,6 +285,7 @@ class DetailScreenState extends State<DetailScreen> {
         .collection('cartOrders')
         .doc(widget.productModel.productId.toString());
 
+    print('Details screen = ${widget.productModel.productId.toString()}');
     DocumentSnapshot snapshot = await documentReference.get();
 
     if(snapshot.exists) {
@@ -318,7 +318,7 @@ class DetailScreenState extends State<DetailScreen> {
           productTotalPrice: double.parse(widget.productModel.fullPrice),
       );
 
-
+      print("cart model product id = ${cartModel.productId}");
       await documentReference.set(cartModel.toMap());
 
       print('product add = ${cartModel}');

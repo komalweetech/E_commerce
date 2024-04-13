@@ -1,5 +1,6 @@
 // ignore_for_file: file_names, prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last, no_leading_underscores_for_local_identifiers
 
+import 'package:buzz/screen/auth/user_signUp_screen.dart';
 import 'package:buzz/screen/auth/welcomeScreen.dart';
 import 'package:buzz/screen/shopping/previous_orders_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,6 +18,42 @@ class DrawerWidget extends StatefulWidget {
 }
 
 class _DrawerWidgetState extends State<DrawerWidget> {
+  // log out dialog box
+  void _showSignOutDialog(BuildContext context) {
+    Navigator.of(context).pop();
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Sign Out'),
+          content: const Text('Are you sure you want to sign out?'),
+          actions: <Widget>[
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: AppConstant.appPrimaryColor),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: const Text('Cancel',style: TextStyle(color: AppConstant.appTextColor),),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                try {
+                  await FirebaseAuth.instance.signOut();
+                  Navigator.of(context).pop(); // Close the dialog
+                  Get.to(UserSignUpScreen());
+                } catch (e) {
+                  print("Error signing out: $e");
+                  // Handle sign-out errors
+                }
+              },
+              child: Text('Sign Out'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -152,7 +189,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   // FirebaseAuth _auth = FirebaseAuth.instance;
                   // await _auth.signOut();
                   // await googleSignIn.signOut();
-                  Get.offAll(() => WelComeScreen());
+                  // Get.offAll(() => WelComeScreen());
+                  _showSignOutDialog(context);
+
                 },
                 titleAlignment: ListTileTitleAlignment.center,
                 title: Text(

@@ -18,9 +18,9 @@ class DrawerWidget extends StatefulWidget {
 }
 
 class _DrawerWidgetState extends State<DrawerWidget> {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  UserModel? user;
+  late String userName = '';
+
+  User? user = FirebaseAuth.instance.currentUser;
 
   // log out dialog box
   void _showSignOutDialog(BuildContext context) {
@@ -62,22 +62,18 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    fetchUserData();
+    fetchUserName();
   }
-  Future<void> fetchUserData() async {
-    try {
-      final currentUser = _auth.currentUser;
-      if (currentUser != null) {
-        final userDoc = await _firestore.collection('user').doc(currentUser.uid).get();
-        if (userDoc.exists) {
-          setState(() {
-            user = UserModel.fromMap(userDoc.data()!); // Convert Map to UserModel
-          });
-        }
-      }
-    } catch (e) {
-      print('Error fetching user data: $e');
+  // Fetch seller name from Firestore
+  void fetchUserName() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      DocumentSnapshot doc = await FirebaseFirestore.instance.collection('user').doc(user.uid).get();
+      setState(() {
+        userName = doc.get('name');
+      });
     }
+    print("seller name == $userName");
   }
 
   @override
@@ -100,14 +96,14 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               child: ListTile(
                 titleAlignment: ListTileTitleAlignment.center,
                 title: Text(
-                 user?.name ?? 'No User',
+                 userName,
                   style: TextStyle(color: AppConstant.appTextColor),
                 ),
                 leading: CircleAvatar(
                   radius: 22.0,
                   backgroundColor: AppConstant.appPrimaryColor,
                   child: Text(
-                   user!.name.isNotEmpty ? user!.name[0] : '',
+                    userName.isNotEmpty ? userName[0] : '',
                     style: TextStyle(color: AppConstant.appTextColor),
                   ),
                 ),

@@ -25,11 +25,15 @@ class _ProfileFragmentState extends State<ProfileFragment> {
 
   Future<void> _getImageFromGallery() async {
     final picker = ImagePicker();
-    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
-    if (pickedImage != null) {
-      setState(() {
-        userProfile = File(pickedImage.path);
-      });
+    try {
+      final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+      if (pickedImage != null) {
+        setState(() {
+          userProfile = File(pickedImage.path);
+        });
+      }
+    } catch (e) {
+      print('Error picking image: $e');
     }
   }
 
@@ -51,7 +55,10 @@ class _ProfileFragmentState extends State<ProfileFragment> {
                   alignment: Alignment.center,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(80),
-                    child: const Image(image: AssetImage('assets/images/ic_arrivals_1.jpg'), height: 100, width: 100, fit: BoxFit.cover),
+                    child:userProfile != null
+                        ? Image.file(userProfile!, height: 100, width: 100, fit: BoxFit.cover)
+                        : const Image(image: AssetImage('assets/images/ic_arrivals_1.jpg'), height: 100, width: 100, fit: BoxFit.cover),
+
                   ),
                 ),
                 Align(

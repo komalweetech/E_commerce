@@ -10,8 +10,9 @@ import '../screen/widgets/card_widget.dart';
 
 
 class FavoriteFragment extends StatefulWidget {
+  final String userId;
 
-  const FavoriteFragment({Key? key}) : super(key: key);
+  const FavoriteFragment({Key? key,required this.userId}) : super(key: key);
 
   @override
   _FavoriteFragmentState createState() => _FavoriteFragmentState();
@@ -25,7 +26,12 @@ class _FavoriteFragmentState extends State<FavoriteFragment> {
     print('Building FavoriteFragment widget');
     return Scaffold(
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('favorite').snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('favorite')
+            .doc(widget.userId) // Reference the user's document
+            .collection('items')
+            .snapshots(),
+
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             print('Firestore stream: Waiting for data...');
@@ -34,6 +40,9 @@ class _FavoriteFragmentState extends State<FavoriteFragment> {
           if (snapshot.hasError) {
             print('Firestore stream error: ${snapshot.error}');
             return Center(child: Text('Error: ${snapshot.error}'));
+          }
+          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return Center(child: Text('No favorite items found'));
           }
           print('Firestore stream: Data received...');
           return ListView.separated(

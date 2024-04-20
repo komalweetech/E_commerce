@@ -1,9 +1,11 @@
 import 'package:buzz/model/favoriteItem_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:buzz/component/BestODWidget.dart';
 import 'package:buzz/screen/details/DetailScreen.dart';
@@ -23,7 +25,7 @@ class HomeFragment extends StatefulWidget {
 
 class _HomeFragmentState extends State<HomeFragment> {
   final List<ShoppingModel> data = getSearchData();
-  final PageController _pageController = PageController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -65,8 +67,24 @@ class _HomeFragmentState extends State<HomeFragment> {
                   ),
                   const SizedBox(height: 16),
                   Padding(
+                    padding: const EdgeInsets.only(left: 16, bottom: 8),
+                    child: Text("New Arrivals",
+                        textAlign: TextAlign.start,
+                        overflow: TextOverflow.clip,
+                        style: boldTextStyle()),
+                  ),
+                  HorizontalList(
+                    padding: const EdgeInsets.only(left: 16, right: 16),
+                    itemCount: data.length,
+                    itemBuilder: (_, index) {
+                      return arrivalWidget(
+                          context: context, img: data[index].img);
+                    },
+                  ),
+                  const SizedBox(height: 16, width: 16),
+                  Padding(
                     padding:
-                        const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+                    const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -78,125 +96,73 @@ class _HomeFragmentState extends State<HomeFragment> {
                             style: boldTextStyle()),
                         TextButton(
                           onPressed: () {
-                           Get.to(const AllProductsScreen());
+                            Get.to(const AllProductsScreen());
                           },
                           child: Text("Show all", style: secondaryTextStyle()),
                         ),
                       ],
                     ),
                   ),
-                  HorizontalList(
-                    padding: const EdgeInsets.only(left: 16, right: 16),
-                    itemCount: snapshot.data!.docs.length,
-                    // itemBuilder: (context, index) {
-                    //   DocumentSnapshot document = snapshot.data!.docs[index];
-                    //   Map<String, dynamic> data =
-                    //       document.data() as Map<String, dynamic>;
-                    //   String productId = data['productId'] ?? '' ;
-                    //   String imageUrl = data['productImages'][0] ?? '';
-                    //   String name = data['productName'] ?? '';
-                    //   String subName = data['deliveryTime'] ?? '';
-                    //   String amount = data['fullPrice'] ?? '';
-                    //   String description = data['productDescription'] ?? '';
-                    //   return InkWell(
-                    //     highlightColor: Colors.transparent,
-                    //     splashColor: Colors.transparent,
-                    //     borderRadius: BorderRadius.circular(10),
-                    //     onTap: () {
-                    //       Get.to(DetailScreen(
-                    //         productId: productId,
-                    //           image: imageUrl,
-                    //           name: name,
-                    //           subName: subName,
-                    //           amount: amount,
-                    //           desc: description,
-                    //       ));
-                    //     },
-                    //     child: BestODWidget(
-                    //       image: imageUrl,
-                    //       name: name,
-                    //       subName: subName,
-                    //       amount: amount,
-                    //     ),
-                    //   );
-                    // },
-                    itemBuilder: (context, index) {
-                      final productData = snapshot.data!.docs[index];
-                      ProductModel productModel = ProductModel(
-                        productId: productData['productId'],
-                        productName: productData['productName'],
-                        fullPrice: productData['fullPrice'],
-                        productImages: productData['productImages'],
-                        deliveryTime: productData['deliveryTime'],
-                        productDescription: productData['productDescription'],
-                        createdAt: productData['createdAt'],
-                        updatedAt: productData['updatedAt'],
-                      );
-
-                      print('Home screen Product Id == ${productModel.productId}');
-
-                      // CategoriesModel categoriesModel = CategoriesModel(
-                      //   categoryId: snapshot.data!.docs[index]['categoryId'],
-                      //   categoryImg: snapshot.data!.docs[index]['categoryImg'],
-                      //   categoryName: snapshot.data!.docs[index]['categoryName'],
-                      //   createdAt: snapshot.data!.docs[index]['createdAt'],
-                      //   updatedAt: snapshot.data!.docs[index]['updatedAt'],
-                      // );
-                      return InkWell(
-                              highlightColor: Colors.transparent,
-                              splashColor: Colors.transparent,
-                              borderRadius: BorderRadius.circular(10),
-                              onTap: () {
-                                Get.to(DetailScreen(productModel: productModel,));
-                              },
-                              child: BestODWidget(
-                                image: productModel.productImages.first,
-                                name: productModel.productName,
-                                subName: productModel.deliveryTime,
-                                amount: productModel.fullPrice,
-                                favoriteItem: FavoriteItemModel(
-                                    productId: productModel.productId,
-                                    productName: productModel.productName,
-                                    fullPrice: productModel.fullPrice,
-                                    productImages: productModel.productImages,
-                                    deliveryTime: productModel.deliveryTime,
-                                    productDescription: productModel.productDescription,
-                                    createdAt: productModel.createdAt,
-                                    updatedAt: productModel.updatedAt),
-
-                                onFavoriteToggle: (isFavorite) {
-                                  print('favorite model  Product Id == ${productModel.productId}');
-                                  if (isFavorite) {
-                                    // Item is now favorite
-                                  } else {
-                                    // Item is no longer favorite
-                                  }
-                                },
-                                disc: productModel.productDescription,
-                              ),
-                            );
-                    },
-                  ),
-                  const SizedBox(height: 16, width: 16),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16, bottom: 8),
-                    child: Text("New Arrivals",
-                        textAlign: TextAlign.start,
-                        overflow: TextOverflow.clip,
-                        style: boldTextStyle()),
-                  ),
                   Responsive(
                     mobile: ListView.builder(
                       padding: const EdgeInsets.all(8),
                       shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: data.length,
-                      itemBuilder: (_, index) {
-                        return arrivalWidget(
-                            context: context, img: data[index].img);
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, index) {
+                        final productData = snapshot.data!.docs[index];
+                        ProductModel productModel = ProductModel(
+                          productId: productData['productId'],
+                          productName: productData['productName'],
+                          fullPrice: productData['fullPrice'],
+                          productImages: productData['productImages'],
+                          deliveryTime: productData['deliveryTime'],
+                          productDescription: productData['productDescription'],
+                          createdAt: productData['createdAt'],
+                          updatedAt: productData['updatedAt'],
+                        );
+
+                        print('Home screen Product Id == ${productModel.productId}');
+
+                        // CategoriesModel categoriesModel = CategoriesModel(
+                        //   categoryId: snapshot.data!.docs[index]['categoryId'],
+                        //   categoryImg: snapshot.data!.docs[index]['categoryImg'],
+                        //   categoryName: snapshot.data!.docs[index]['categoryName'],
+                        //   createdAt: snapshot.data!.docs[index]['createdAt'],
+                        //   updatedAt: snapshot.data!.docs[index]['updatedAt'],
+                        // );
+                        return Container(
+                          height: Get.height / 3,
+                          child: InkWell(
+                            highlightColor: Colors.transparent,
+                            splashColor: Colors.transparent,
+                            borderRadius: BorderRadius.circular(10),
+                            onTap: () {
+                              Get.to(DetailScreen(productModel: productModel,));
+                            },
+                            child: BestODWidget(
+                              image: productModel.productImages.first,
+                              name: productModel.productName,
+                              subName: productModel.deliveryTime,
+                              amount: productModel.fullPrice,
+                              favoriteItem: FavoriteItemModel(
+                                  productId: productModel.productId,
+                                  productName: productModel.productName,
+                                  fullPrice: productModel.fullPrice,
+                                  productImages: productModel.productImages,
+                                  deliveryTime: productModel.deliveryTime,
+                                  productDescription: productModel.productDescription,
+                                  createdAt: productModel.createdAt,
+                                  updatedAt: productModel.updatedAt),
+
+                              disc: productModel.productDescription,
+                            ),
+                          ),
+                        );
                       },
                     ),
-                  )
+                  ),
+
                 ],
               ),
             );

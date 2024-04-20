@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:buzz/controller/user_signUp_controller.dart';
 import 'package:buzz/screen/home/DashBoardScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -29,20 +30,22 @@ class _SplashScreenState extends State<SplashScreen> {
       alreadyLoginUser(context);
       // Get.offAll(WelcomeScreen());
     });
+  } // get user name
+  String? getUserDisplayName() {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      print("user display name = ${user.displayName}");
+      return user.displayName;
+    } else {
+      return null;
+    }
   }
   // check user already loged in or new?
   Future<void> alreadyLoginUser (BuildContext context) async {
     if(user != null) {
-      final GetUserDataController getUserDataController = Get.put(GetUserDataController());
-      var userData = await getUserDataController.getUserData(user!.uid);
+      String? userName = getUserDisplayName();
+      Get.offAll(DashBoardScreen());
 
-      Get.offAll(const DashBoardScreen());
-
-      // if(userData[0]['isAdmin'] == true) {
-      //   Get.offAll(AdminMainScreen());
-      // }else {
-      //   Get.offAll(DashBoardScreen());
-      // }
     }else{
       Get.offAll(const WelComeScreen());
     }

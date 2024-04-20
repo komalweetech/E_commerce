@@ -144,7 +144,7 @@ class DetailScreenState extends State<DetailScreen> {
                           textAlign: TextAlign.start,
                           overflow: TextOverflow.clip,
                           style: boldTextStyle()),
-                      Text("Price: ${widget.productModel.fullPrice}",
+                      Text("Price: \$ ${widget.productModel.fullPrice}",
                           textAlign: TextAlign.start,
                           overflow: TextOverflow.clip,
                           style: boldTextStyle()),

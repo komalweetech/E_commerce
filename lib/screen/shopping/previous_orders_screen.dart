@@ -127,6 +127,6 @@ class _PreviousOrdersScreenState extends State<PreviousOrdersScreen> {
           return Container();
         },
       ),
-    );;
+    );
   }
 }

@@ -57,6 +57,5 @@ class UserSignUpController extends GetxController {
           colorText: AppConstant.appTextColor);
     }
   }
-
-
 }
+

@@ -6,6 +6,7 @@ Future<String> getCustomerDeviceToken() async {
   try {
     String? token = await FirebaseMessaging.instance.getToken();
     if (token != null) {
+      print("get order devise token == $token");
       return token;
     } else {
       throw Exception("Error");

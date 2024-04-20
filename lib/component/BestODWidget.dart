@@ -1,4 +1,5 @@
 
+
 import 'package:buzz/model/favoriteItem_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -56,7 +57,7 @@ class _BestODWidgetState extends State<BestODWidget>  {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('favorite')
           .where('productId', isEqualTo: widget.favoriteItem.productId)
-          // .limit(1)
+      // .limit(1)
           .get();
 
       print("constracture  product id = ${widget.favoriteItem.productId}");
@@ -81,79 +82,85 @@ class _BestODWidgetState extends State<BestODWidget>  {
       }
     }
   }
-
+//C:\Users\WS 01\AppData\Local\Android\Sdk
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: Get.width / 2 - 24,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            height: 170,
-            child: Column(
-              children: [
-                const SizedBox(height: 1),
-                Align(
-                  alignment: Alignment.topRight,
-                  child: GestureDetector(
-                    onTap: () async {
-                      print('Favorite icon tapped for ${widget.name}');
+    return Padding(
+      padding:  EdgeInsets.only(top: 12,left: 12,right: 12),
+      child: SizedBox(
+        width: Get.width / 2 - 24,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              margin: EdgeInsets.all(08),
+              height: 200,
+              child: Column(
+                children: [
+                  const SizedBox(height: 1),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: GestureDetector(
+                      onTap: () async {
+                        print('Favorite icon tapped for ${widget.name}');
 
-                      setState(() {
-                        isFavorite = !isFavorite;
-                      });
+                        setState(() {
+                          isFavorite = !isFavorite;
+                        });
 
-                      await handleFavoriteToggle(isFavorite);
-                    },
-                    child: Container(
-                      margin: const EdgeInsets.only(right: 8),
-                      height: 30,
-                      width: 30,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.grey.withOpacity(0.2),
-                      ),
-                      child: Icon(
-                        Icons.favorite,
-                        color: isFavorite ? Colors.red : Colors.black26,
-                        size: 20,
+                        await handleFavoriteToggle(isFavorite);
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(right: 8),
+                        height: 30,
+                        width: 30,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.grey.withOpacity(0.2),
+                        ),
+                        child: Icon(
+                          Icons.favorite,
+                          color: isFavorite ? Colors.red : Colors.black26,
+                          size: 20,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                // const SizedBox(height: 16),
-                Expanded(child: Image.network(widget.image!, height: 100, width: 150, fit: BoxFit.cover)),
-              ],
+                  // const SizedBox(height: 16),
+                  Expanded(
+                      child: Image.network(widget.image!,
+                          height: Get.height /1.5,
+                          width: Get.width,
+                          fit: BoxFit.cover)),
+                ],
+              ),
             ),
-          ),
-          // const SizedBox(height: 4),
-          Padding(
-            padding:  EdgeInsets.only(left: 05.0,top: 08.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(widget.name!, style: boldTextStyle(size: 14)),
-                // const SizedBox(height: 4),
-                SizedBox(
-                  width:Get.width/ 2 - 12,
-                  child: Text(widget.subName!, maxLines: 2, style: secondaryTextStyle(size: 12)),
-                ),
-                // const SizedBox(height: 4),
-                Text(widget.amount!, style: secondaryTextStyle(size: 12)),
-              ],
-            ),
-          )
+            // const SizedBox(height: 4),
+            Padding(
+              padding:  EdgeInsets.only(left: 15.0,),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(widget.name!, style: boldTextStyle(size: 14)),
+                  // const SizedBox(height: 4),
+                  SizedBox(
+                    width:Get.width/ 2 - 12,
+                    child: Text(widget.subName!, maxLines: 2, style: secondaryTextStyle(size: 12)),
+                  ),
+                  // const SizedBox(height: 4),
+                  Text("\$ ${widget.amount!}", style: secondaryTextStyle(size: 12)),
+                ],  //C:\Users\WS 01\AppData\Local\Android\Sdk
+              ),
+            )
 
-        ],
+          ],
+        ),
       ),
     );
   }
 
 }
-
-

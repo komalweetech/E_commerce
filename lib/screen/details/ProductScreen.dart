@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:buzz/screen/DevelopmentScreen.dart';
 import 'package:buzz/utils/DataGenerator.dart';
 
 import '../../../../main.dart';
 import '../../model/ShoppingModel.dart';
+import '../../utils/app_constant.dart';
 
 class ProductScreen extends StatefulWidget {
   final String? img;
@@ -24,26 +26,21 @@ class _ProductScreenState extends State<ProductScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
-        centerTitle: true,
-        title: Image(
-          image: const AssetImage('assets/images/ic_logo.png'),
-          height: 30,
-          width: 30,
-          color: appStore.isDarkModeOn ? Colors.white : Colors.black,
-          fit: BoxFit.cover,
+        iconTheme: const IconThemeData(color: AppConstant.appTextColor),
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarColor: AppConstant.appSecondPrimaryColor,
+          statusBarIconBrightness: Brightness.light,
         ),
-        automaticallyImplyLeading: false,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.zero,
-          side: BorderSide(color: Color(0x00000000), width: 1),
-        ),
+        backgroundColor: AppConstant.appPrimaryColor,
         leading: InkWell(
           onTap: () {
             finish(context);
           },
-          child: Icon(Icons.arrow_back_ios, color: context.iconColor, size: 2),
+          child: Icon(Icons.arrow_back_ios, color: AppConstant.appTextColor, size: 25),
         ),
+        automaticallyImplyLeading: false,
+        elevation: 0,
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(bottom: 26),
@@ -72,7 +69,7 @@ class _ProductScreenState extends State<ProductScreen> {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   Text("45 items", textAlign: TextAlign.start, overflow: TextOverflow.clip, style: boldTextStyle()),
-                  Icon(Icons.sort, color: context.iconColor, size: 24),
+                  // Icon(Icons.sort, color: context.iconColor, size: 24),
                 ],
               ),
             ),

@@ -1,6 +1,7 @@
 import 'package:buzz/screen/shopping/current_order_screen.dart';
 import 'package:buzz/screen/shopping/cart_screen.dart';
 import 'package:buzz/utils/app_constant.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:buzz/fragment/FavoriteFragment.dart';
 import 'package:buzz/fragment/HomeFragment.dart';
@@ -9,12 +10,13 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
+import '../../controller/user_signUp_controller.dart';
 import '../../model/product_model.dart';
 import '../widgets/custom-drawer-widget.dart';
 
 
 class DashBoardScreen extends StatefulWidget {
-  const DashBoardScreen({super.key});
+  const DashBoardScreen({super.key,});
 
   @override
   State<DashBoardScreen> createState() => _DashBoardScreenState();
@@ -22,24 +24,25 @@ class DashBoardScreen extends StatefulWidget {
 
 class _DashBoardScreenState extends State<DashBoardScreen> {
   int selectedIndex = 0;
-
   List<ProductModel> favoriteProducts = [];
-
   late List<Widget> tabs;
+  final user = FirebaseAuth.instance.currentUser;
+
 
 
   @override
   void initState() {
     super.initState();
+    print("user email = ${user!.email}");
+    print("user uid = ${user!.uid}");
 
     tabs = [
       const HomeFragment(title: "Home",),
       const CartScreen(title: "Cart",),
-      FavoriteFragment(),
+       FavoriteFragment(userId: user!.uid),
       const ProfileFragment(title: "Profile",),
     ];
   }
-
 
   @override
   void setState(fn) {

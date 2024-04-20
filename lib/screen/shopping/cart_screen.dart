@@ -1,7 +1,6 @@
 // ignore_for_file: file_names, prefer_const_constructors, avoid_unnecessary_containers, prefer_const_literals_to_create_immutables, sized_box_for_whitespace, avoid_print
 import 'package:buzz/controller/cart_Price_controller.dart';
 import 'package:buzz/screen/shopping/checkOut_screen.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,13 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:flutter_swipe_action_cell/flutter_swipe_action_cell.dart';
-import 'package:image_card/image_card.dart';
-import 'package:nb_utils/nb_utils.dart';
 
 import '../../model/cart_model.dart';
-import '../../model/order_model.dart';
 import '../../utils/app_constant.dart';
-import '../details/DetailScreen.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key, required this.title});
@@ -28,8 +23,14 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
   User? user = FirebaseAuth.instance.currentUser;
-  final CartPriceController cartPriceController =
-      Get.put(CartPriceController());
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print("current user = ${user!.uid}");
+  }
+  final CartPriceController cartPriceController = Get.put(CartPriceController());
   List<CartModel> cartItems = [];
 
   @override
@@ -137,7 +138,7 @@ class _CartScreenState extends State<CartScreen> {
                               subtitle: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  Text(cartModel.productTotalPrice.toString()),
+                                  Text("\$ ${cartModel.productTotalPrice.toString()}"),
                                   SizedBox(
                                     width: Get.width / 20.0,
                                   ),
@@ -251,7 +252,7 @@ class _CartScreenState extends State<CartScreen> {
             children: [
               Obx(
                 () => Text(
-                  " Total:  ${cartPriceController.totalPrice.value.toStringAsFixed(1)}",
+                  " Total: \$ ${cartPriceController.totalPrice.value.toStringAsFixed(1)}",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
               ),

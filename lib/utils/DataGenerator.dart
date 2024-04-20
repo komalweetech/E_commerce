@@ -4,15 +4,15 @@ import 'package:nb_utils/nb_utils.dart';
 
 import '../model/ShoppingModel.dart';
 
-List<ShoppingModel> getAccount() {
-  List<ShoppingModel> list = [];
-  list.add(ShoppingModel(name: 'My Order'));
-  list.add(ShoppingModel(name: 'Vouchers'));
-  list.add(ShoppingModel(name: 'Shopping Address'));
-  list.add(ShoppingModel(name: 'Setting'));
-
-  return list;
-}
+// List<ShoppingModel> getAccount() {
+//   List<ShoppingModel> list = [];
+//   list.add(ShoppingModel(name: 'My Order'));
+//   list.add(ShoppingModel(name: 'Vouchers'));
+//   list.add(ShoppingModel(name: 'Shopping Address'));
+//   list.add(ShoppingModel(name: 'Setting'));
+//
+//   return list;
+// }
 
 List<ShoppingModel> paymentList() {
   List<ShoppingModel> list = [];
@@ -23,16 +23,16 @@ List<ShoppingModel> paymentList() {
   return list;
 }
 
-List<ShoppingModel> getShopping() {
-  List<ShoppingModel> list = [];
-  list.add(ShoppingModel(name: 'New Arrival'));
-  list.add(ShoppingModel(name: 'Men'));
-  list.add(ShoppingModel(name: 'Women'));
-  list.add(ShoppingModel(name: 'Kids'));
-  list.add(ShoppingModel(name: 'Sale'));
-
-  return list;
-}
+// List<ShoppingModel> getShopping() {
+//   List<ShoppingModel> list = [];
+//   list.add(ShoppingModel(name: 'New Arrival'));
+//   list.add(ShoppingModel(name: 'Men'));
+//   list.add(ShoppingModel(name: 'Women'));
+//   list.add(ShoppingModel(name: 'Kids'));
+//   list.add(ShoppingModel(name: 'Sale'));
+//
+//   return list;
+// }
 
 List<ShoppingModel> getProductData() {
   List<ShoppingModel> list = [];
@@ -44,36 +44,36 @@ List<ShoppingModel> getProductData() {
   return list;
 }
 
-List<ShoppingModel> getAllData() {
-  List<ShoppingModel> list = [];
-  list.add(ShoppingModel(name: 'Nike Air VaporMax Evo', subtitle: 'Men\'s shoes', img: 'assets/images/ic_shoes_5.png', amount: '\$300.00'));
-  list.add(ShoppingModel(name: 'Adidas Ultra Boost', subtitle: 'Women\'s shoes', img: 'assets/images/ic_shoes_1.png', amount: '\$200.00'));
-  list.add(ShoppingModel(name: 'Jordan Air Retro 1', subtitle: 'Nike Air Huarache', img: 'assets/images/ic_shoes_3.png', amount: '\$250.00'));
-  list.add(ShoppingModel(name: 'Puma RS-X', subtitle: 'men\'s shoes', img: 'assets/images/ic_shoes_4.png', amount: '\$350.00'));
-  list.add(ShoppingModel(name: 'New Balance 990v5', subtitle: 'Nike Air Huarache', img: 'assets/images/ic_shoes_5.png', amount: '\$400.00'));
-  list.add(ShoppingModel(name: 'Reebok Classic Leather', subtitle: 'men\'s shoes', img: 'assets/images/ic_shoes_6.png', amount: '\$300.00'));
-  list.add(ShoppingModel(name: 'Converse Chuck Taylor All Star', subtitle: 'men\'s shoes', img: 'assets/images/ic_shoes_8.png', amount: '\$100.00'));
+// List<ShoppingModel> getAllData() {
+//   List<ShoppingModel> list = [];
+//   list.add(ShoppingModel(name: 'Nike Air VaporMax Evo', subtitle: 'Men\'s shoes', img: 'assets/images/ic_shoes_5.png', amount: '\$300.00'));
+//   list.add(ShoppingModel(name: 'Adidas Ultra Boost', subtitle: 'Women\'s shoes', img: 'assets/images/ic_shoes_1.png', amount: '\$200.00'));
+//   list.add(ShoppingModel(name: 'Jordan Air Retro 1', subtitle: 'Nike Air Huarache', img: 'assets/images/ic_shoes_3.png', amount: '\$250.00'));
+//   list.add(ShoppingModel(name: 'Puma RS-X', subtitle: 'men\'s shoes', img: 'assets/images/ic_shoes_4.png', amount: '\$350.00'));
+//   list.add(ShoppingModel(name: 'New Balance 990v5', subtitle: 'Nike Air Huarache', img: 'assets/images/ic_shoes_5.png', amount: '\$400.00'));
+//   list.add(ShoppingModel(name: 'Reebok Classic Leather', subtitle: 'men\'s shoes', img: 'assets/images/ic_shoes_6.png', amount: '\$300.00'));
+//   list.add(ShoppingModel(name: 'Converse Chuck Taylor All Star', subtitle: 'men\'s shoes', img: 'assets/images/ic_shoes_8.png', amount: '\$100.00'));
+//
+//   return list;
+// }
 
-  return list;
-}
+// List<ShoppingModel> getAllFavorite() {
+//   List<ShoppingModel> list = [];
+//   list.add(ShoppingModel(name: 'Adidas Ultraboost 21', subtitle: 'Men\'s shoes', img: 'assets/images/ic_shoes_3.png', amount: '\$300.00'));
+//   list.add(ShoppingModel(name: 'Nike React Infinity Run', subtitle: 'Women\'s shoes', img: 'assets/images/ic_shoes_10.png', amount: '\$200.00'));
+//   list.add(ShoppingModel(name: 'New Balance Fresh Foam 1080v11', subtitle: 'Nike Air Huarache', img: 'assets/images/ic_shoes_11.png', amount: '\$250.00'));
+//
+//   return list;
+// }
 
-List<ShoppingModel> getAllFavorite() {
-  List<ShoppingModel> list = [];
-  list.add(ShoppingModel(name: 'Adidas Ultraboost 21', subtitle: 'Men\'s shoes', img: 'assets/images/ic_shoes_3.png', amount: '\$300.00'));
-  list.add(ShoppingModel(name: 'Nike React Infinity Run', subtitle: 'Women\'s shoes', img: 'assets/images/ic_shoes_10.png', amount: '\$200.00'));
-  list.add(ShoppingModel(name: 'New Balance Fresh Foam 1080v11', subtitle: 'Nike Air Huarache', img: 'assets/images/ic_shoes_11.png', amount: '\$250.00'));
-
-  return list;
-}
-
-List<ShoppingModel> getAllCart() {
-  List<ShoppingModel> list = [];
-  list.add(ShoppingModel(name: 'Adidas Ultraboost 21', subtitle: 'Men\'s shoes', img: 'assets/images/ic_shoes_11.png', amount: '\$300.00'));
-  list.add(ShoppingModel(name: 'Nike React Infinity Run', subtitle: 'Women\'s shoes', img: 'assets/images/ic_shoes_4.png', amount: '\$200.00'));
-  list.add(ShoppingModel(name: 'New Balance Fresh Foam 1080v11', subtitle: 'Nike Air Huarache', img: 'assets/images/ic_shoes_1.png', amount: '\$250.00'));
-
-  return list;
-}
+// List<ShoppingModel> getAllCart() {
+//   List<ShoppingModel> list = [];
+//   list.add(ShoppingModel(name: 'Adidas Ultraboost 21', subtitle: 'Men\'s shoes', img: 'assets/images/ic_shoes_11.png', amount: '\$300.00'));
+//   list.add(ShoppingModel(name: 'Nike React Infinity Run', subtitle: 'Women\'s shoes', img: 'assets/images/ic_shoes_4.png', amount: '\$200.00'));
+//   list.add(ShoppingModel(name: 'New Balance Fresh Foam 1080v11', subtitle: 'Nike Air Huarache', img: 'assets/images/ic_shoes_1.png', amount: '\$250.00'));
+//
+//   return list;
+// }
 
 
 List<ShoppingModel> getSearchData() {

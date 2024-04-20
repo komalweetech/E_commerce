@@ -1,12 +1,12 @@
 // ignore_for_file: file_names, prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last, no_leading_underscores_for_local_identifiers
 
-import 'package:buzz/screen/auth/user_signUp_screen.dart';
-import 'package:buzz/screen/auth/welcomeScreen.dart';
+import 'package:buzz/screen/auth/user_signIn_screen.dart';
 import 'package:buzz/screen/shopping/previous_orders_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import '../../model/user_model.dart';
 import '../../utils/app_constant.dart';
 import '../shopping/current_order_screen.dart';
 
@@ -18,6 +18,10 @@ class DrawerWidget extends StatefulWidget {
 }
 
 class _DrawerWidgetState extends State<DrawerWidget> {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  UserModel? user;
+
   // log out dialog box
   void _showSignOutDialog(BuildContext context) {
     Navigator.of(context).pop();
@@ -40,7 +44,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 try {
                   await FirebaseAuth.instance.signOut();
                   Navigator.of(context).pop(); // Close the dialog
-                  Get.to(UserSignUpScreen());
+                  Get.to(UserSignInScreen());
                 } catch (e) {
                   print("Error signing out: $e");
                   // Handle sign-out errors
@@ -52,6 +56,28 @@ class _DrawerWidgetState extends State<DrawerWidget> {
         );
       },
     );
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fetchUserData();
+  }
+  Future<void> fetchUserData() async {
+    try {
+      final currentUser = _auth.currentUser;
+      if (currentUser != null) {
+        final userDoc = await _firestore.collection('user').doc(currentUser.uid).get();
+        if (userDoc.exists) {
+          setState(() {
+            user = UserModel.fromMap(userDoc.data()!); // Convert Map to UserModel
+          });
+        }
+      }
+    } catch (e) {
+      print('Error fetching user data: $e');
+    }
   }
 
   @override
@@ -74,18 +100,14 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               child: ListTile(
                 titleAlignment: ListTileTitleAlignment.center,
                 title: Text(
-                  "Waris",
-                  style: TextStyle(color: AppConstant.appTextColor),
-                ),
-                subtitle: Text(
-                  "Version 1.0.1",
+                 user?.name ?? 'No User',
                   style: TextStyle(color: AppConstant.appTextColor),
                 ),
                 leading: CircleAvatar(
                   radius: 22.0,
                   backgroundColor: AppConstant.appPrimaryColor,
                   child: Text(
-                    "W",
+                   user!.name.isNotEmpty ? user!.name[0] : '',
                     style: TextStyle(color: AppConstant.appTextColor),
                   ),
                 ),
@@ -115,7 +137,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 ),
                 onTap: () {
                   Get.back();
-                  Get.to(CurrentOrdersScreen());
                 },
               ),
             ),

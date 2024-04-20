@@ -9,22 +9,21 @@ import '../utils/app_constant.dart';
 
 class UserSignInController extends GetxController{
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
   //for password visibilty
   static var  isPasswordVisibile = true.obs;
 
   Future<UserCredential?> singInMethod(
-      String sellerEmail,
-      String sellerPassword,
+      String userEmail,
+      String userPassword,
       ) async {
     try {
-      EasyLoading.show(status: 'Please wait');
+      // EasyLoading.show(status: 'Please wait');
       UserCredential userCredential =
       await _auth.signInWithEmailAndPassword(
-          email: sellerEmail, password: sellerPassword);
+          email: userEmail, password: userPassword,);
 
-      EasyLoading.dismiss();
+      // EasyLoading.dismiss();
       return userCredential;
     } on FirebaseAuthException catch (e) {
       EasyLoading.dismiss();

@@ -1,7 +1,10 @@
 
+
+import 'dart:io';
 import 'package:buzz/screen/shopping/AllOrder_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:nb_utils/nb_utils.dart';
 import '../main.dart';
 import '../screen/auth/update_profile_screen.dart';
@@ -12,11 +15,24 @@ class ProfileFragment extends StatefulWidget {
   const ProfileFragment({super.key,required this.title});
   final String title;
 
+
   @override
   State<ProfileFragment> createState() => _ProfileFragmentState();
 }
 
 class _ProfileFragmentState extends State<ProfileFragment> {
+  File? userProfile;
+
+  Future<void> _getImageFromGallery() async {
+    final picker = ImagePicker();
+    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      setState(() {
+        userProfile = File(pickedImage.path);
+      });
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -40,13 +56,16 @@ class _ProfileFragmentState extends State<ProfileFragment> {
                 ),
                 Align(
                   alignment: const Alignment(0.2, -0.2),
-                  child: Container(
-                    margin: EdgeInsets.zero,
-                    padding: EdgeInsets.zero,
-                    width: 50,
-                    height: 30,
-                    decoration: BoxDecoration(color: const Color(0xff000000), shape: BoxShape.circle, border: Border.all(color: const Color(0x4d9e9e9e), width: 1)),
-                    child: const Icon(Icons.edit, color: Color(0xffffffff), size: 18),
+                  child: GestureDetector(
+                    onTap: _getImageFromGallery,
+                    child: Container(
+                      margin: EdgeInsets.zero,
+                      padding: EdgeInsets.zero,
+                      width: 50,
+                      height: 30,
+                      decoration: BoxDecoration(color: const Color(0xff000000), shape: BoxShape.circle, border: Border.all(color: const Color(0x4d9e9e9e), width: 1)),
+                      child: const Icon(Icons.edit, color: Color(0xffffffff), size: 18),
+                    ),
                   ),
                 ),
               ],

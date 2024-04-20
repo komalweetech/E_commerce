@@ -16,11 +16,6 @@ class _DevScreenState extends State<DevScreen> {
   @override
   void initState() {
     super.initState();
-    init();
-  }
-
-  void init() async {
-    //
   }
 
   @override

@@ -64,7 +64,7 @@ Widget arrivalWidget({String? img, BuildContext? context}) {
     padding: const EdgeInsets.all(8.0),
     child: InkWell(
       onTap: () {
-        ProductScreen(img: img).launch(context);
+        // ProductScreen(img: img).launch(context);
       },
       child: Stack(
         children: [

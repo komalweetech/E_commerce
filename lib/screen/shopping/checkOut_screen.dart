@@ -1,4 +1,6 @@
 // ignore_for_file: file_names, prefer_const_constructors, avoid_unnecessary_containers, prefer_const_literals_to_create_immutables, sized_box_for_whitespace, avoid_print, unused_local_variable, use_build_context_synchronously
+import 'dart:ffi';
+
 import 'package:buzz/controller/cart_Price_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,7 +15,6 @@ import '../../model/cart_model.dart';
 import '../../utils/app_constant.dart';
 import '../service/place_oeder_service.dart';
 
-
 class CheckOutScreen extends StatefulWidget {
   const CheckOutScreen({super.key});
 
@@ -23,12 +24,29 @@ class CheckOutScreen extends StatefulWidget {
 
 class _CheckOutScreenState extends State<CheckOutScreen> {
   User? user = FirebaseAuth.instance.currentUser;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  String _text = '';
+  bool _error = false;
+
+  void _validateInput(String value) {
+    setState(() {
+      _text = value;
+      // Check if the input is empty or invalid
+      _error = value.isEmpty || !isValid(value); // Replace isValid with your validation logic
+    });
+  }
+  bool isValid(String value) {
+    // Add your validation logic here
+    return value.length >= 6;
+  }
+
 
   final CartPriceController cartPriceController = Get.put(CartPriceController());
 
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController addressController = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +60,8 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
         backgroundColor: AppConstant.appPrimaryColor,
         title: const Text(
           "Check out your Order",
-          style: TextStyle(color: AppConstant.appTextColor,fontWeight: FontWeight.w500),
+          style: TextStyle(
+              color: AppConstant.appTextColor, fontWeight: FontWeight.w500),
         ),
         leading: InkWell(
           onTap: () {
@@ -52,109 +71,117 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
         ),
         centerTitle: true,
       ),
-      body: StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('cart')
-            .doc(user!.uid)
-            .collection('cartOrders')
-            .snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.hasError) {
-            return Center(
-              child: Text("Error"),
-            );
-          }
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Container(
-              height: Get.height / 5,
-              child: Center(
-                child: CupertinoActivityIndicator(),
-              ),
-            );
-          }
+      body: Form(
+        key: _formKey,
+        child: StreamBuilder(
+          stream: FirebaseFirestore.instance
+              .collection('cart')
+              .doc(user!.uid)
+              .collection('cartOrders')
+              .snapshots(),
+          builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.hasError) {
+              return Center(
+                child: Text("Error"),
+              );
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Container(
+                height: Get.height / 5,
+                child: Center(
+                  child: CupertinoActivityIndicator(),
+                ),
+              );
+            }
 
-          if (snapshot.data!.docs.isEmpty) {
-            return Center(
-              child: Text("No products found!"),
-            );
-          }
+            if (snapshot.data!.docs.isEmpty) {
+              return Center(
+                child: Text("No products found!"),
+              );
+            }
 
-          if (snapshot.data != null) {
-            return Padding(
-              padding:  EdgeInsets.all(12),
-              child: Container(
-                child: ListView.builder(
-                  itemCount: snapshot.data!.docs.length,
-                  shrinkWrap: true,
-                  physics: BouncingScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    final productData = snapshot.data!.docs[index];
-                    CartModel cartModel = CartModel(
-                      productId: productData['productId'],
-                      productName: productData['productName'],
-                      fullPrice: productData['fullPrice'],
-                      productImages: productData['productImages'],
-                      deliveryTime: productData['deliveryTime'],
-                      productDescription: productData['productDescription'],
-                      createdAt: productData['createdAt'],
-                      updatedAt: productData['updatedAt'],
-                      productQuantity: productData['productQuantity'],
-                      productTotalPrice: double.parse(
-                          productData['productTotalPrice'].toString()),
-                    );
+            if (snapshot.data != null) {
+              return Padding(
+                padding: EdgeInsets.all(12),
+                child: Container(
+                  child: ListView.builder(
+                    itemCount: snapshot.data!.docs.length,
+                    shrinkWrap: true,
+                    physics: BouncingScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      final productData = snapshot.data!.docs[index];
+                      CartModel cartModel = CartModel(
+                        productId: productData['productId'],
+                        productName: productData['productName'],
+                        fullPrice: productData['fullPrice'],
+                        productImages: productData['productImages'],
+                        deliveryTime: productData['deliveryTime'],
+                        productDescription: productData['productDescription'],
+                        createdAt: productData['createdAt'],
+                        updatedAt: productData['updatedAt'],
+                        productQuantity: productData['productQuantity'],
+                        productTotalPrice: double.parse(
+                            productData['productTotalPrice'].toString()),
+                      );
 
-                    //calculate price
-                    cartPriceController.fetchProductPrice();
-                    return SwipeActionCell(
-                      key: ObjectKey(cartModel.productId),
-                      trailingActions: [
-                        SwipeAction(
-                          title: "Delete",
-                          forceAlignmentToBoundary: true,
-                          performsFirstActionWithFullSwipe: true,
-                          onTap: (CompletionHandler handler) async {
-                            print('deleted');
+                      //calculate price
+                      cartPriceController.fetchProductPrice();
+                      return SwipeActionCell(
+                        key: ObjectKey(cartModel.productId),
+                        trailingActions: [
+                          SwipeAction(
+                            title: "Delete",
+                            forceAlignmentToBoundary: true,
+                            performsFirstActionWithFullSwipe: true,
+                            onTap: (CompletionHandler handler) async {
+                              print('deleted');
 
-                            await FirebaseFirestore.instance
-                                .collection('cart')
-                                .doc(user!.uid)
-                                .collection('cartOrders')
-                                .doc(cartModel.productId)
-                                .delete();
-                          },
-                        )
-                      ],
-                      child: Card(
-                        margin: EdgeInsets.all(10),
-                        elevation: 5,
-                        color: AppConstant.appTextColor,
-                        child: ListTile(
-                          leading: CircleAvatar(
-                            backgroundColor: AppConstant.appPrimaryColor,
-                            backgroundImage:
-                            NetworkImage(cartModel.productImages[0]),
-                          ),
-                          title: Text(cartModel.productName,style: TextStyle(fontSize: 18,fontWeight: FontWeight.w600),),
-                          subtitle: Padding(
-                            padding:  EdgeInsets.only(top: 5.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(cartModel.productTotalPrice.toString()),
-                              ],
+                              await FirebaseFirestore.instance
+                                  .collection('cart')
+                                  .doc(user!.uid)
+                                  .collection('cartOrders')
+                                  .doc(cartModel.productId)
+                                  .delete();
+                            },
+                          )
+                        ],
+                        child: Card(
+                          margin: EdgeInsets.all(10),
+                          elevation: 5,
+                          color: AppConstant.appTextColor,
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              backgroundColor: AppConstant.appPrimaryColor,
+                              backgroundImage:
+                                  NetworkImage(cartModel.productImages[0]),
+                            ),
+                            title: Text(
+                              cartModel.productName,
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.w600),
+                            ),
+                            subtitle: Padding(
+                              padding: EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                      "\$ ${cartModel.productTotalPrice.toString()}"),
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
-              ),
-            );
-          }
+              );
+            }
 
-          return Container();
-        },
+            return Container();
+          },
+        ),
       ),
       bottomNavigationBar: Container(
         margin: EdgeInsets.only(bottom: 5.0),
@@ -162,13 +189,13 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Obx(
-                  () => Padding(
-                    padding:  EdgeInsets.only(left: 10.0),
-                    child: Text(
-                                    " Total: ${cartPriceController.totalPrice.value.toStringAsFixed(1)}",
-                                    style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),
-                                  ),
-                  ),
+              () => Padding(
+                padding: EdgeInsets.only(left: 10.0),
+                child: Text(
+                  " Total: \$ ${cartPriceController.totalPrice.value.toStringAsFixed(1)}",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                ),
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -236,19 +263,26 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                 child: Container(
                   height: 55.0,
                   child: TextFormField(
-                    controller: phoneController,
-                    textInputAction: TextInputAction.next,
-                    keyboardType: TextInputType.phone,
-                    decoration: InputDecoration(
-                      labelText: 'Phone',
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 10.0,
+                    onChanged: _validateInput,
+                      controller: phoneController,
+                      textInputAction: TextInputAction.next,
+                      keyboardType: TextInputType.phone,
+                      decoration: InputDecoration(
+                        errorText: _error ? 'Invalid number' : null,
+                        labelText: 'Phone',
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 10.0,
+                        ),
+                        hintStyle: TextStyle(
+                          fontSize: 12,
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.red),
+                        ),
                       ),
-                      hintStyle: TextStyle(
-                        fontSize: 12,
+
+
                       ),
-                    ),
-                  ),
                 ),
               ),
               Padding(
@@ -270,36 +304,41 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 15,),
+              SizedBox(
+                height: 15,
+              ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppConstant.appPrimaryColor,
                   padding: EdgeInsets.all(15.0),
                 ),
                 onPressed: () async {
-                  if (nameController.text != '' &&
-                      phoneController.text != '' &&
-                      addressController.text != '') {
-                    String name = nameController.text.trim();
-                    String phone = phoneController.text.trim();
-                    String address = addressController.text.trim();
-                    String customerToken = await getCustomerDeviceToken();
+                  if(_formKey.currentState!.validate()) {
+                    if (nameController.text.isNotEmpty &&
+                        phoneController.text.isNotEmpty &&
+                        addressController.text.isNotEmpty) {
+                      String name = nameController.text.trim();
+                      String phone = phoneController.text.trim();
+                      String address = addressController.text.trim();
+                      String customerToken = await getCustomerDeviceToken();
 
-                    //place order serice
-                    placeOrder(
-                      context: context,
-                      customerName: name,
-                      customerPhone: phone,
-                      customerAddress: address,
-                      customerDeviceToken: customerToken,
-                    );
-                  } else {
-                    print("Fill The Details");
-                    Get.snackbar("warning", "Please Enter all Details ",
-                        snackPosition: SnackPosition.BOTTOM,
-                        backgroundColor: AppConstant.appSecondPrimaryColor,
-                        colorText: AppConstant.appTextColor);
+                      //place order serice
+                      placeOrder(
+                        context: context,
+                        customerName: name,
+                        customerPhone: phone,
+                        customerAddress: address,
+                        customerDeviceToken: customerToken,
+                      );
+                    }  else {
+                      print("Fill The Details");
+                      Get.snackbar("warning", "Please Enter all Details ",
+                          snackPosition: SnackPosition.BOTTOM,
+                          backgroundColor: AppConstant.appSecondPrimaryColor,
+                          colorText: AppConstant.appTextColor);
+                    }
                   }
+
                 },
                 child: Text(
                   "Place Order",

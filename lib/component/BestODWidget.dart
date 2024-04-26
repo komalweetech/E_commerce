@@ -1,7 +1,6 @@
-
-
 import 'package:buzz/model/favoriteItem_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -35,59 +34,57 @@ class BestODWidget extends StatefulWidget {
   State<BestODWidget> createState() => _BestODWidgetState();
 }
 
-class _BestODWidgetState extends State<BestODWidget>  {
-  late bool isFavorite = false;
+class _BestODWidgetState extends State<BestODWidget> {
+   bool isFavorite = false;
+  User? user = FirebaseAuth.instance.currentUser;
 
-  Future<void> handleFavoriteToggle(bool isFavorite) async {
-    widget.onFavoriteToggle?.call(isFavorite);
-    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    // Add or remove the item from the "favorite" collection based on its favorite status
-    if (isFavorite) {
-      await FirebaseFirestore.instance
-          .collection('favorite')
-          .add(widget.favoriteItem.toMap());
-
-      // save data to local database
-      List<String> favoriteItems = prefs.getStringList('favorite_items') ?? [];
-      favoriteItems.add(widget.favoriteItem.productName);
-      await prefs.setStringList('favorite_items', favoriteItems);
-    } else {
-      // Retrieve the document ID of the item in the "favorite" collection
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection('favorite')
-          .where('productId', isEqualTo: widget.favoriteItem.productId)
-      // .limit(1)
-          .get();
-
-      print("constracture  product id = ${widget.favoriteItem.productId}");
-      print("snapshot product id = ${querySnapshot.docs}");
-
-      // Delete the document from the "favorite" collection
-      if (querySnapshot.docs.isNotEmpty) {
-        try {
-          await FirebaseFirestore.instance
-              .collection('favorite')
-              .doc(querySnapshot.docs.first.id)
-              .delete();
-
-          // Update local storage
-          List<String> favoriteItems = prefs.getStringList('favorite_items') ??
-              [];
-          favoriteItems.remove(widget.favoriteItem.productName);
-          await prefs.setStringList('favorite_items', favoriteItems);
-        } catch (e){
-          print('Error deleting document: $e');
-        }
-      }
-    }
+  @override
+  void initState() {
+    super.initState();
+    getFavoriteState();
+    print("current user id == ${user!.uid}");
   }
-//C:\Users\WS 01\AppData\Local\Android\Sdk
+
+   void getFavoriteState() async {
+     print('Getting favorite state for ${widget.name}');
+     SharedPreferences prefs = await SharedPreferences.getInstance();
+     setState(() {
+       isFavorite = prefs.getBool('isFavorite_${widget.favoriteItem.productId}') ?? false;
+     });
+   }
+
+
+   Future<void> handleFavoriteToggle(bool value) async {
+    //save data in locat data
+     print('Saving favorite state for ${widget.name}: $value');
+     SharedPreferences prefs = await SharedPreferences.getInstance();
+     await prefs.setBool('isFavorite_${widget.favoriteItem.productId}', value);
+     setState(() {
+       isFavorite = value;
+     });
+     widget.onFavoriteToggle?.call(value);
+     widget.onFavoriteChanged?.call();
+
+    //  // save data in firebase.
+    // setState(() {
+    //   isFavorite = !isFavorite;
+    // });
+    // widget.onFavoriteToggle?.call(isFavorite);
+
+    // Store the favorite item under the user's ID
+    await FirebaseFirestore.instance
+        .collection('favorite')
+        .doc(user!.uid)
+        .collection('items')
+        .doc(widget.favoriteItem.productId)
+        .set(widget.favoriteItem.toMap());
+  }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:  EdgeInsets.only(top: 12,left: 12,right: 12),
+      padding: EdgeInsets.only(top: 12, left: 12, right: 12),
       child: SizedBox(
         width: Get.width / 2 - 24,
         child: Column(
@@ -105,12 +102,8 @@ class _BestODWidgetState extends State<BestODWidget>  {
                     child: GestureDetector(
                       onTap: () async {
                         print('Favorite icon tapped for ${widget.name}');
-
-                        setState(() {
-                          isFavorite = !isFavorite;
-                        });
-
-                        await handleFavoriteToggle(isFavorite);
+                        handleFavoriteToggle(!isFavorite);
+                        // saveFavoriteState(!isFavorite);
                       },
                       child: Container(
                         margin: const EdgeInsets.only(right: 8),
@@ -132,7 +125,7 @@ class _BestODWidgetState extends State<BestODWidget>  {
                   // const SizedBox(height: 16),
                   Expanded(
                       child: Image.network(widget.image!,
-                          height: Get.height /1.5,
+                          height: Get.height / 1.5,
                           width: Get.width,
                           fit: BoxFit.cover)),
                 ],
@@ -140,7 +133,7 @@ class _BestODWidgetState extends State<BestODWidget>  {
             ),
             // const SizedBox(height: 4),
             Padding(
-              padding:  EdgeInsets.only(left: 15.0,),
+              padding: EdgeInsets.only(left: 15.0,),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -148,12 +141,14 @@ class _BestODWidgetState extends State<BestODWidget>  {
                   Text(widget.name!, style: boldTextStyle(size: 14)),
                   // const SizedBox(height: 4),
                   SizedBox(
-                    width:Get.width/ 2 - 12,
-                    child: Text(widget.subName!, maxLines: 2, style: secondaryTextStyle(size: 12)),
+                    width: Get.width / 2 - 12,
+                    child: Text(widget.subName!, maxLines: 2,
+                        style: secondaryTextStyle(size: 12)),
                   ),
                   // const SizedBox(height: 4),
-                  Text("\$ ${widget.amount!}", style: secondaryTextStyle(size: 12)),
-                ],  //C:\Users\WS 01\AppData\Local\Android\Sdk
+                  Text("\$ ${widget.amount!}",
+                      style: secondaryTextStyle(size: 12)),
+                ], //C:\Users\WS 01\AppData\Local\Android\Sdk
               ),
             )
 
@@ -164,3 +159,5 @@ class _BestODWidgetState extends State<BestODWidget>  {
   }
 
 }
+
+

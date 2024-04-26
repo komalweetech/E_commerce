@@ -56,13 +56,11 @@ class _CartScreenState extends State<CartScreen> {
               ),
             );
           }
-
           if (snapshot.data!.docs.isEmpty) {
             return Center(
               child: Text("No products found!"),
             );
           }
-
           if (snapshot.data != null) {
             return Container(
               child: ListView.builder(
@@ -75,13 +73,14 @@ class _CartScreenState extends State<CartScreen> {
                     productId: productData['productId'],
                     productName: productData['productName'],
                     fullPrice: productData['fullPrice'],
-                    productImages: productData['productImages'],
+                    productImage: productData['productImage'],
                     deliveryTime: productData['deliveryTime'],
                     productDescription: productData['productDescription'],
                     createdAt: productData['createdAt'],
                     updatedAt: productData['updatedAt'],
                     productQuantity: productData['productQuantity'],
                     productTotalPrice: productData['productTotalPrice'],
+                    size: productData['size'],
                   );
 
                   //calculate price
@@ -126,7 +125,7 @@ class _CartScreenState extends State<CartScreen> {
                                 child: CircleAvatar(
                                   backgroundColor: Colors.transparent,
                                   backgroundImage:
-                                      NetworkImage(cartModel.productImages[0]),
+                                      NetworkImage(cartModel.productImage),
                                   radius: 50.0,
                                 ),
                               ),

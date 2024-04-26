@@ -4,7 +4,8 @@ class OrderModel {
   final String productId;
   final String productName;
   final String fullPrice;
-  final List productImages;
+  final String productImage;
+  final String size;
   final String deliveryTime;
   final String productDescription;
   final dynamic createdAt;
@@ -22,7 +23,8 @@ class OrderModel {
     required this.productId,
     required this.productName,
     required this.fullPrice,
-    required this.productImages,
+    required this.productImage,
+    required this.size,
     required this.deliveryTime,
     required this.productDescription,
     required this.createdAt,
@@ -42,7 +44,8 @@ class OrderModel {
       'productId': productId,
       'productName': productName,
       'fullPrice': fullPrice,
-      'productImages': productImages,
+      'productImage': productImage,
+      'size' : size,
       'deliveryTime': deliveryTime,
       'productDescription': productDescription,
       'createdAt': createdAt,
@@ -63,7 +66,8 @@ class OrderModel {
       productId: json['productId'],
       productName: json['productName'],
       fullPrice: json['fullPrice'],
-      productImages: json['productImages'],
+      productImage: json['productImage'],
+      size: json['size'],
       deliveryTime: json['deliveryTime'],
       productDescription: json['productDescription'],
       createdAt: json['createdAt'],

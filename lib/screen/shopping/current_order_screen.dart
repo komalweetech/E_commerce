@@ -69,7 +69,8 @@ class _CurrentOrdersScreenState extends State<CurrentOrdersScreen> {
                     productId: productData['productId'],
                     productName: productData['productName'],
                     fullPrice: productData['fullPrice'],
-                    productImages: List<String>.from(productData['productImages']),
+                    productImage: productData['productImages'],
+                    size: productData['size'],
                     deliveryTime: productData['deliveryTime'],
                     productDescription: productData['productDescription'],
                     createdAt: (productData['createdAt'] as Timestamp).toDate(),
@@ -96,7 +97,7 @@ class _CurrentOrdersScreenState extends State<CurrentOrdersScreen> {
                         leading: CircleAvatar(
                           backgroundColor: AppConstant.appPrimaryColor,
                           backgroundImage:
-                          NetworkImage(orderModel.productImages.first),
+                          NetworkImage(orderModel.productImage),
                         ),
                         title: Text(orderModel.productName),
                         subtitle: Row(

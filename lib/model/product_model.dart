@@ -7,6 +7,7 @@ class ProductModel {
   final List productImages;
   final String deliveryTime;
   final String productDescription;
+  final List size;
   final dynamic createdAt;
   final dynamic updatedAt;
 
@@ -17,6 +18,7 @@ class ProductModel {
     required this.productImages,
     required this.deliveryTime,
     required this.productDescription,
+    required this.size,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -29,6 +31,7 @@ class ProductModel {
       'productImages': productImages,
       'deliveryTime': deliveryTime,
       'productDescription': productDescription,
+      'size' : size,
       'createdAt': createdAt,
       'updatedAt': updatedAt,
     };
@@ -42,6 +45,7 @@ class ProductModel {
       productImages: json['productImages'],
       deliveryTime: json['deliveryTime'],
       productDescription: json['productDescription'],
+      size : json['size'],
       createdAt: json['createdAt'],
       updatedAt: json['updatedAt'],
     );

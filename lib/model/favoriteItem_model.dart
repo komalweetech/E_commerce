@@ -7,8 +7,10 @@ class FavoriteItemModel {
   final List productImages;
   final String deliveryTime;
   final String productDescription;
+  final List size;
   final dynamic createdAt;
   final dynamic updatedAt;
+  bool isFavorite;
 
   FavoriteItemModel({
     required this.productId,
@@ -17,8 +19,10 @@ class FavoriteItemModel {
     required this.productImages,
     required this.deliveryTime,
     required this.productDescription,
+    required this.size,
     required this.createdAt,
     required this.updatedAt,
+    this.isFavorite = false,
   });
 
   Map<String, dynamic> toMap() {
@@ -29,8 +33,10 @@ class FavoriteItemModel {
       'productImages': productImages,
       'deliveryTime': deliveryTime,
       'productDescription': productDescription,
+      'size' : size,
       'createdAt': createdAt,
       'updatedAt': updatedAt,
+      'isFavorite': isFavorite,
     };
   }
 
@@ -42,8 +48,10 @@ class FavoriteItemModel {
       productImages: json['productImages'],
       deliveryTime: json['deliveryTime'],
       productDescription: json['productDescription'],
+      size : json['size'],
       createdAt: json['createdAt'],
       updatedAt: json['updatedAt'],
+      isFavorite: json['isFavorite'] ?? false,
     );
   }
 }

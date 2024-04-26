@@ -34,17 +34,17 @@ class _FavoriteFragmentState extends State<FavoriteFragment> {
 
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            print('Firestore stream: Waiting for data...');
+            print('Firestorm stream: Waiting for data...');
             return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasError) {
-            print('Firestore stream error: ${snapshot.error}');
+            print('Firestorm stream error: ${snapshot.error}');
             return Center(child: Text('Error: ${snapshot.error}'));
           }
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return Center(child: Text('No favorite items found'));
+            return const Center(child: Text('No favorite items found'));
           }
-          print('Firestore stream: Data received...');
+          print('Firestorm stream: Data received...');
           return ListView.separated(
             itemCount: snapshot.data!.docs.length,
             itemBuilder: (context, index) {
@@ -56,6 +56,7 @@ class _FavoriteFragmentState extends State<FavoriteFragment> {
                 productImages: productData['productImages'],
                 deliveryTime: productData['deliveryTime'],
                 productDescription: productData['productDescription'],
+                size: productData['size'],
                 createdAt: productData['createdAt'],
                 updatedAt: productData['updatedAt'],
               );

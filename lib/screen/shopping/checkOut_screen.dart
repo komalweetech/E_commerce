@@ -114,7 +114,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                         productId: productData['productId'],
                         productName: productData['productName'],
                         fullPrice: productData['fullPrice'],
-                        productImages: productData['productImages'],
+                        productImage: productData['productImage'],
                         deliveryTime: productData['deliveryTime'],
                         productDescription: productData['productDescription'],
                         createdAt: productData['createdAt'],
@@ -122,6 +122,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                         productQuantity: productData['productQuantity'],
                         productTotalPrice: double.parse(
                             productData['productTotalPrice'].toString()),
+                        size: productData['size'],
                       );
 
                       //calculate price
@@ -153,7 +154,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                             leading: CircleAvatar(
                               backgroundColor: AppConstant.appPrimaryColor,
                               backgroundImage:
-                                  NetworkImage(cartModel.productImages[0]),
+                                  NetworkImage(cartModel.productImage),
                             ),
                             title: Text(
                               cartModel.productName,

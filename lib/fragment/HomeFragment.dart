@@ -26,6 +26,15 @@ class HomeFragment extends StatefulWidget {
 class _HomeFragmentState extends State<HomeFragment> {
   final List<ShoppingModel> data = getSearchData();
 
+  // save favorite data in this function
+  void handleFavoriteToggle(bool isFavorite) {
+    // Implement logic to save or remove item from favorites here
+    if (isFavorite) {
+      // Add item to favorites
+    } else {
+      // Remove item from favorites
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -118,6 +127,7 @@ class _HomeFragmentState extends State<HomeFragment> {
                           productImages: productData['productImages'],
                           deliveryTime: productData['deliveryTime'],
                           productDescription: productData['productDescription'],
+                          size: productData['size'],
                           createdAt: productData['createdAt'],
                           updatedAt: productData['updatedAt'],
                         );
@@ -141,6 +151,7 @@ class _HomeFragmentState extends State<HomeFragment> {
                               Get.to(DetailScreen(productModel: productModel,));
                             },
                             child: BestODWidget(
+                              onFavoriteToggle: handleFavoriteToggle,
                               image: productModel.productImages.first,
                               name: productModel.productName,
                               subName: productModel.deliveryTime,
@@ -152,6 +163,7 @@ class _HomeFragmentState extends State<HomeFragment> {
                                   productImages: productModel.productImages,
                                   deliveryTime: productModel.deliveryTime,
                                   productDescription: productModel.productDescription,
+                                  size: productModel.size,
                                   createdAt: productModel.createdAt,
                                   updatedAt: productModel.updatedAt),
 
@@ -185,8 +197,7 @@ class _HomeFragmentState extends State<HomeFragment> {
                   alignment: Alignment.topRight,
                   children: [
                     Image(
-                        image:
-                            const AssetImage('assets/images/ic_arrivals_2.jpg'),
+                        image: const AssetImage('assets/images/ic_arrivals_2.jpg'),
                         height: 200,
                         width: Get.width,
                         fit: BoxFit.cover),

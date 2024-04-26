@@ -1,13 +1,12 @@
 import 'package:buzz/model/cart_model.dart';
 import 'package:buzz/model/product_model.dart';
 import 'package:buzz/screen/shopping/cart_screen.dart';
+import 'package:buzz/screen/shopping/checkOut_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:buzz/utils/Widgets.dart';
 import '../../controller/cart_Price_controller.dart';
@@ -26,8 +25,9 @@ class DetailScreen extends StatefulWidget {
 
 class DetailScreenState extends State<DetailScreen> {
   final CartPriceController cartPriceController = Get.put(CartPriceController()); // Get the cart controller instance
-  int selectedIndex = 0; // Define selectedIndex here
+  int selectedIndex = 0;
   User? user = FirebaseAuth.instance.currentUser;
+  int selectSize = 0;
 
 
   @override
@@ -84,40 +84,43 @@ class DetailScreenState extends State<DetailScreen> {
                     fit: BoxFit.cover,
                   ),
                   const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
-                    children: widget.productModel.productImages.map((image) {
-                      return InkWell(
-                        splashColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                        radius: 8,
-                        onTap: () {
-                          setState(() {
-                            selectedIndex = widget.productModel.productImages.indexOf(image);
-                          });
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.only(right: 8),
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: context.cardColor,
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(
-                              color: widget.productModel.productImages.indexOf(image) == selectedIndex
-                                  ? Colors.red
-                                  : Colors.transparent,
+                  Padding(
+                    padding: EdgeInsets.only(left: 12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
+                      children: widget.productModel.productImages.map((image) {
+                        return InkWell(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          radius: 8,
+                          onTap: () {
+                            setState(() {
+                              selectedIndex = widget.productModel.productImages.indexOf(image);
+                            });
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(right: 8),
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: context.cardColor,
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color: widget.productModel.productImages.indexOf(image) == selectedIndex
+                                    ? Colors.red
+                                    : Colors.transparent,
+                              ),
                             ),
+                            child: Image(
+                                image: NetworkImage(image),
+                                height: 40,
+                                width: 40,
+                                fit: BoxFit.cover),
                           ),
-                          child: Image(
-                              image: NetworkImage(image),
-                              height: 40,
-                              width: 40,
-                              fit: BoxFit.cover),
-                        ),
-                      ).paddingRight(8);
-                    }).toList(),
+                        ).paddingRight(8);
+                      }).toList(),
+                    ),
                   ),
                   const SizedBox(height: 16),
                 ],
@@ -160,72 +163,38 @@ class DetailScreenState extends State<DetailScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Container(
-                        alignment: Alignment.center,
-                        margin:
-                            const EdgeInsets.only(right: 8, top: 4, bottom: 4),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 4),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.rectangle,
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(
-                              color: const Color(0x4d9e9e9e), width: 1),
-                        ),
-                        child: Text("US 7",
-                            textAlign: TextAlign.left,
-                            overflow: TextOverflow.clip,
-                            style: boldTextStyle(size: 12)),
-                      ),
-                      Container(
-                        alignment: Alignment.center,
-                        margin: const EdgeInsets.all(4),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 4),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.rectangle,
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(
-                              color: const Color(0x4d9e9e9e), width: 1),
-                        ),
-                        child: Text("US 8",
-                            textAlign: TextAlign.left,
-                            overflow: TextOverflow.clip,
-                            style: boldTextStyle(size: 12)),
-                      ),
-                      Container(
-                        alignment: Alignment.center,
-                        margin: const EdgeInsets.all(4),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 4),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16.0),
-                          border: Border.all(
-                              color: const Color(0x4d9e9e9e), width: 1),
-                        ),
-                        child: Text("US 9",
-                            textAlign: TextAlign.left,
-                            overflow: TextOverflow.clip,
-                            style: boldTextStyle(size: 12)),
-                      ),
-                      Container(
-                        alignment: Alignment.center,
-                        margin: const EdgeInsets.all(4),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 4),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.rectangle,
-                          borderRadius: BorderRadius.circular(16.0),
-                          border: Border.all(
-                              color: const Color(0x4d9e9e9e), width: 1),
-                        ),
-                        child: Text("US 10",
-                            textAlign: TextAlign.left,
-                            overflow: TextOverflow.clip,
-                            style: boldTextStyle(size: 12)),
-                      ),
-                    ],
+                    children: widget.productModel.size.map((size) {
+                      return InkWell(
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        radius: 8,
+                        onTap: () {
+                          setState(() {
+                            selectSize = widget.productModel.size.indexOf(size);
+                          });
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          margin:
+                          const EdgeInsets.only(right: 8, top: 4, bottom: 4),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 4),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.rectangle,
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(
+                              color: widget.productModel.size.indexOf(size) == selectSize
+                                  ? Colors.red
+                                  : Colors.grey,
+                            ),
+                          ),
+                          child: Text(size,
+                              textAlign: TextAlign.left,
+                              overflow: TextOverflow.clip,
+                              style: boldTextStyle(size: 12)),
+                        ) ,
+                      );
+                    }).toList()
                   ),
                   const SizedBox(height: 16, width: 16),
                   Text("Description",
@@ -249,7 +218,10 @@ class DetailScreenState extends State<DetailScreen> {
           children: [
             InkWell(
               onTap: () async {
-                await checkProductExistence(uId: user!.uid);
+                await checkProductExistence(
+                  uId: user!.uid,
+                  selectedImage: widget.productModel.productImages[selectedIndex],
+                  selectedSize: widget.productModel.size[selectSize],);
                 Get.to(CartScreen(title: "Cart"));
               }, //  call cart function.
               child: Container(
@@ -266,8 +238,11 @@ class DetailScreenState extends State<DetailScreen> {
                 context: context,
                 title: 'Buy Now',
                 onPressed: () async {
-                  await checkProductExistence(uId: user!.uid);
-                  Get.to(CartScreen(title: "Cart"));
+                  await checkProductExistence(
+                      uId: user!.uid,
+                      selectedImage: widget.productModel.productImages[selectedIndex],
+                      selectedSize: widget.productModel.size[selectSize]);
+                  Get.to(CheckOutScreen());
                   },
               ),
             ),
@@ -278,57 +253,66 @@ class DetailScreenState extends State<DetailScreen> {
   }
 
   // add product in cart
-  Future<void> checkProductExistence({required String uId, int quantityIncrement = 1,}) async {
+  Future<void> checkProductExistence({
+    required String uId,
+    int quantityIncrement = 1,
+    required String selectedImage,
+    required String selectedSize,}) async {
     final DocumentReference documentReference = FirebaseFirestore.instance
         .collection('cart')
         .doc(uId)
         .collection('cartOrders')
         .doc(widget.productModel.productId.toString());
 
-    print('Details screen = ${widget.productModel.productId.toString()}');
-    DocumentSnapshot snapshot = await documentReference.get();
+    try{
+      print('Details screen = ${widget.productModel.productId.toString()}');
+      DocumentSnapshot snapshot = await documentReference.get();
 
-    if(snapshot.exists) {
-      int currentQuantity = snapshot['productQuantity'];
-      int updateQuantity = currentQuantity + quantityIncrement;
-      double totalPrice = double.parse(widget.productModel.fullPrice) * updateQuantity;
+      if(snapshot.exists) {
+        int currentQuantity = snapshot['productQuantity'];
+        int updateQuantity = currentQuantity + quantityIncrement;
+        double totalPrice = double.parse(widget.productModel.fullPrice) * updateQuantity;
 
-      await documentReference.update({
-        'productQuantity' : updateQuantity,
-        'productTotalPrice' : totalPrice,
-      });
+        await documentReference.update({
+          'productQuantity' : updateQuantity,
+          'productTotalPrice' : totalPrice,
+        });
 
-      print('product exists. Quantity updated.');
-    }else{
-      await FirebaseFirestore.instance.collection('cart').doc(uId).set({
-        'uId' : uId,
-        'createdAt' : DateTime.now(),
-      });
+        print('product exists. Quantity updated.');
+      }else{
+        await FirebaseFirestore.instance.collection('cart').doc(uId).set({
+          'uId' : uId,
+          'createdAt' : DateTime.now(),
+        });
 
-      CartModel cartModel = CartModel(
+        CartModel cartModel = CartModel(
           productId: widget.productModel.productId,
           productName: widget.productModel.productName,
           fullPrice: widget.productModel.fullPrice,
-          productImages: widget.productModel.productImages,
+          productImage: selectedImage,
           deliveryTime: widget.productModel.deliveryTime,
           productDescription: widget.productModel.productDescription,
           createdAt: DateTime.now(),
           updatedAt: DateTime.now(),
           productQuantity: 1,
           productTotalPrice: double.parse(widget.productModel.fullPrice),
-      );
+          size: selectedSize,
+        );
 
-      print("cart model product id = ${cartModel.productId}");
-      await documentReference.set(cartModel.toMap());
+        print("cart model product id = ${cartModel.productId}");
+        await documentReference.set(cartModel.toMap());
 
-      print('product add = ${cartModel}');
-      log("Your product add to Cart");
-      Get.snackbar("add Cart", "Your product add to cart ",
-          duration: Duration(seconds: 2),
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor:
-          AppConstant.appSecondPrimaryColor,
-          colorText: AppConstant.appTextColor);
+        print('product add = ${cartModel}');
+        log("Your product add to Cart");
+        Get.snackbar("add Cart", "Your product add to cart ",
+            duration: Duration(seconds: 2),
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor:
+            AppConstant.appSecondPrimaryColor,
+            colorText: AppConstant.appTextColor);
+      }
+    }catch (e){
+      print('Error adding product to cart: $e');
     }
   }
 }
